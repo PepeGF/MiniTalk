@@ -3,25 +3,39 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void	ft_fill_byte(int bit, int num)
+char	*str;
+
+void	ft_confirmation()
 {
-	(void)bit;
-	(void)num;
 	return ;
 }
 
-int	wololo (int sig)
+
+void	ft_fill_byte(int bit)
+{
+	(void)bit;
+	int	index;
+
+	(void)index;
+
+//enviar señal de recepcion.
+	return ;
+}
+
+void	handler_sig1 (int sig)
 {
 	(void)sig;
 	write(1, "Recibido un 1\n", 14);
-	return (1);
+	ft_fill_byte(1);
+	return ;
 }
 
-int wololo2 (int sig)
+void	handler_sig2 (int sig)
 {
 	(void)sig;
 	write(1, "Recibido un 0\n", 14);
-	return (0);
+	ft_fill_byte(0);
+	return ;
 }
 
 
@@ -30,15 +44,25 @@ int main()
 	int pid;
 	int	i;
 	int letra;
+	int	len;
+
+	(void)letra;
+	(void)len;
 	
 	i = 0;
 	pid = getpid();
-	signal(SIGUSR1, &wololo);
-	signal(SIGUSR2, &wololo2);
+	signal(SIGUSR1, &handler_sig1);
+	signal(SIGUSR2, &handler_sig2);
 	printf("Server PID: %d\n", pid);
-	while (i < 8)
+	while (i  >= 0)
 	{
 		pause();
+		if (i % 8 == 7)//esto son paquetes de 8 bits
+		{
+			if (i == 7)//primer byte
+
+		}
+
 		i++;
 	}
 	return 0;

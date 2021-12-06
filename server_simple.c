@@ -1,85 +1,50 @@
-#include <signal.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <unistd.h>
+#include "minitalk.h"
 
-typedef struct s_data
-{
-	int		pid_client;
-	int		len_str;
-	char	*str;
-}	t_data;
-char	*str;
-int		pid_client;
+char	*g_str;
 
-void	ft_confirmation()
+static void	ft_print_pid(void)
 {
+	write (1, "PID: ", 5);
+	ft_putnbr_fd(getpid(), 1);
+	write (1, "\n", 1);
 	return ;
 }
 
-
-void	ft_fill_byte(int bit)
+static void	sig_handler(int sig, siginfo_t *info, void *ucontext)
 {
-	int	index;
+	static int	i;
+	static int	j;
 
-	pid_client >>= 1;
-	if (bit == 1)
-		pid_client += 2097152;//2^18
+	i = 1;
+	j = 0;
+	//montar el byte
+	if (i == 8)
+		//almacenar en str[j]
 
-	(void)index;
-	return ;
 }
 
-void	handler_sig1 (int sig)
+int	main(void)
 {
-	(void)sig;
-	write(1, "Recibido un 1\n", 14);
-	ft_fill_byte(1);
-	return ;
-}
-
-void	handler_sig2 (int sig)
-{
-	(void)sig;
-	write(1, "Recibido un 0\n", 14);
-	ft_fill_byte(0);
-	return ;
-}
-
-
-int main()
-{
-	int pid;
 	int	i;
-	int letra;
-	int	len;
+	struct sigaction	wololo;
 
-	(void)letra;
-	(void)len;
+	ft_print_pid();
 	
-	i = 0;
-	pid = getpid();
-	signal(SIGUSR1, &handler_sig1);
-	signal(SIGUSR2, &handler_sig2);
-	printf("Server PID: %d\n", pid);
-
-	while (i < 22)
+	while (1)
 	{
+		i = 0;
+		g_str = malloc(size_of(char) * 5);
 		pause();
-		i++;
-	}
-	printf("%d\n", pid_client);
-/*	while (i  >= 0)
-	{
-		pause();
-		if (i % 8 == 7)//esto son paquetes de 8 bits
+		while (i < 32)
 		{
-			if (i == 7)//primer byte
 
 		}
+		i = 0;
+		while (i < len)
+		{
 
-		i++;
+		}
 	}
-*/
-	return 0;
+
+	return (0);
 }

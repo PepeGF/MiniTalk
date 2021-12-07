@@ -34,8 +34,6 @@ static void	ft_send_len(int pid_server, int len)
 		//pause();
 		usleep(1000);
 	}
-
-
 }
 
 static int	ft_verify_input(int argc, char **argv)
@@ -57,8 +55,6 @@ static int	ft_verify_input(int argc, char **argv)
 }
 
 /*
-	ft_sendlen(argv[2], pid_server);
-	write(1, "----------\n", 11);
 	i = 0;
 	while (argv[2][i])
 	{
@@ -84,32 +80,3 @@ static int	ft_verify_input(int argc, char **argv)
 	}
 */
 
-void	ft_sendlen(char *str, int pid_server)
-{
-	int	i;
-	int	aux;
-	int	len;
-
-	i = 0;
-	len = ft_strlen(str);
-	len = 1903;
-	aux = len;
-	ft_putnbr_fd(aux, 1);
-	while (i < 32)
-	{
-		if (aux % 2 == 0)
-		{
-			kill(pid_server, SIGUSR2);
-			write(1, "Enviado un 0\n", 13);
-		}
-		else
-		{
-			kill(pid_server,SIGUSR1);
-			write(1, "Enviado un 1\n", 13);
-		}
-		usleep(1000);
-		aux = aux >> 1;
-		i++;
-	}
-	write (1, "Len enviada\n", 12);
-}

@@ -17,68 +17,83 @@ static void	sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 	static int	c;
 
 	(void)ucontext;
-	ft_putnbr_fd(i, 1);
 	if (sig == SIGUSR1)
 	{
 		c >>= 1;
 		c += 128;
-		write(1, "Recibido 1\n", 11);
 	}
 	else
-	{
 		c >>= 1;
-		write(1, "Recibido 0\n", 11);
-	}
 	//kill(info->si_pid, SIGUSR1);
 	(void)info;
 	if (i % 8 == 0)
-	{
-		write (1, "-", 1);
-		ft_putnbr_fd((int)c, 1);
-		write (1, "\n", 1);
-		g_str[j] = c;
-		
-		j++;
-	}
+		g_str[j++] = c;
 	i++;
 	if (i == 33)
-	{
-		c = (int)g_str[3]*16777216 + (int)g_str[2]*65536 + (int)g_str[1]*256+(int)g_str[0];
 		i = 1;
-		write(1, "LEN TOTAL: \n", 12);
-	ft_putnbr_fd(c, 1);
-	write (1,"\n", 1);
+	return ;
+}
+
+static void	sig_handler_char(int sig, siginfo_t *info, void *ucontext)
+{
+	//es posible que se puedan juntar las dos funciones en una sola
+	static int	i = 1;
+	static int	j;
+	static int	c;
+
+	(void)ucontext;
+	if (sig == SIGUSR1)
+	{
+		c >>= 1;
+		c += 128;
 	}
 	return ;
 }
 
 int	main(void)
 {
-	int	i;
+	int					i;
+	int					len_str;
 	struct sigaction	sa_len;
-//	struct sigaction	sa_char;
+	struct sigaction	sa_char;
 
 	ft_print_pid();
-	
 	while (1)
 	{
 		i = 0;
 		g_str = malloc(sizeof(char) * 5);
 		sa_len.sa_flags = SA_SIGINFO;
 		sa_len.sa_sigaction = &sig_handler_len;
-		g_str[4] = 0;
 		sigaction(SIGUSR1, &sa_len, NULL);
 		sigaction(SIGUSR2, &sa_len, NULL);
-		while (i < 32)
-		{
+		while (i++ < 32)
 			pause();
-		}
+		len_str = (int)g_str[3] * 16777216 + (int)g_str[2] * 65536
+			+ (int)g_str[1] * 256 + (int)g_str[0];
+		free(g_str);
+		g_str = calloc(sizeof(char) * (len_str + 1));
+		sa_char.flags = SA_SIGINFO;
+		sa_char.sa_sigaction = &sig_handler_char;
+		sigaction(SIGUSR1, &sa_char, NULL);
+		sigaction(SIGUSR2, &sa_char, NULL);
+		i = 0;
+		while (i++ < len)
+			pause();
+		free (g_str);
+		ft_putstr_fd(g_str, 1);
+	}
+	return (0);
+}
+
+
+		//write(1, "---\n", 4);
+		//ft_putnbr_fd(c, 1);
+		//
+		//ft_putnbr_fd(c, 1);
+
 /*		i = 0;
 		while (i < len)
 		{
 			i++;
 		}
-*/	}
-
-	return (0);
-}
+*/	

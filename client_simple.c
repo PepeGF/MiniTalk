@@ -1,4 +1,4 @@
-#include "minital.h"
+#include "minitalk.h"
 
 void	ft_sendlen(char *str, int pid_server);
 
@@ -14,23 +14,24 @@ int main (int argc, char *argv[])
 		write(1, "Entrada de datos incorrecta.\n", 29);
 		return (1);
 	}
+	pid_server = ft_atoi(argv[1]);
 	if (pid_server < 0)
 	{
 		write(1, "PID del servidor incorrecto.\n", 29);
 		return (2);
 	}
-	pid_server = ft_atoi(argv[1]);
-	len = ft_strlen(argv[2])
+	len = ft_strlen(argv[2]);
 	i = 0;
 	while (i < 32)
 	{
-		if (pid_client % 2 == 0)
+		if (len % 2 == 0)
 			kill(pid_server, SIGUSR2);
 		else
 			kill(pid_server, SIGUSR1);
-		pid_client >>= 1;
+		len >>= 1;
 		i++;
-		usleep(100);
+		//pause();
+		usleep(1000);
 			
 	}
 

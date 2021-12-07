@@ -14,7 +14,7 @@ static void	sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 {
 	static int	i = 1;
 	static int	j;
-	static int	c;
+	static char	c;
 
 	(void)ucontext;
 	ft_putnbr_fd(i, 1);
@@ -35,20 +35,14 @@ static void	sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 	{
 		write (1, "-", 1);
 		ft_putnbr_fd((int)c, 1);
-		write (1, "\n", 1);
+		write (1, "-", 1);
 		g_str[j] = c;
 		
 		j++;
 	}
 	i++;
-	if (i == 33)
-	{
-		c = (int)g_str[3]*16777216 + (int)g_str[2]*65536 + (int)g_str[1]*256+(int)g_str[0];
+	if (i == 32)
 		i = 1;
-		write(1, "LEN TOTAL: \n", 12);
-	ft_putnbr_fd(c, 1);
-	write (1,"\n", 1);
-	}
 	return ;
 }
 

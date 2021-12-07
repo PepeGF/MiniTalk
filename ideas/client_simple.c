@@ -1,22 +1,20 @@
 #include "minitalk.h"
 
 void	ft_sendlen(char *str, int pid_server);
-static int	ft_verify_input(int argc, char **argv);
+static int	ft_verify_input(int argc, char argv[2]);
 static void	ft_send_len(int pid_server, int len);
 
 int main (int argc, char *argv[])
 {
-	//int				i;
+	int				i;
 	int				pid_server;
 	int				len;
 
-	pid_server = ft_verify_input(argc, argv);
+	pid_server = ft_verify_input(argc, argv[2]);
 	len = ft_strlen(argv[2]);
 	ft_send_len(pid_server, len);
-	return (0);
 }
-
-static void	ft_send_len(int pid_server, int len)
+static void	ft_send_len(int pid_server, int len);
 {
 	int	i;
 	int	aux;
@@ -38,20 +36,20 @@ static void	ft_send_len(int pid_server, int len)
 
 }
 
-static int	ft_verify_input(int argc, char **argv)
+static int	ft_verify_input(int argc, char argv[2])
 {
 	int	pid_server;
 
 	if (argc != 3)
 	{
 		write(1, "Entrada de datos incorrecta.\n", 29);
-		exit(1);
+		exit();
 	}
 	pid_server = ft_atoi(argv[1]);
 	if (pid_server < 0)
 	{
 		write(1, "PID del servidor incorrecto.\n", 29);
-		exit (1);
+		exit ();
 	}
 	return (pid_server);
 }
@@ -83,6 +81,8 @@ static int	ft_verify_input(int argc, char **argv)
 		i++;
 	}
 */
+	return (0);
+}
 
 void	ft_sendlen(char *str, int pid_server)
 {
@@ -92,10 +92,8 @@ void	ft_sendlen(char *str, int pid_server)
 
 	i = 0;
 	len = ft_strlen(str);
-	len = 1903;
 	aux = len;
-	ft_putnbr_fd(aux, 1);
-	while (i < 32)
+	while (i < 8)
 	{
 		if (aux % 2 == 0)
 		{

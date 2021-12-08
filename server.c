@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:53 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 13:36:45 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 19:11:08 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,9 @@ static void	sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 	kill(info->si_pid, SIGUSR1);
 	return ;
 }
-/*
+
 static void	sig_handler_char(int sig, siginfo_t *info, void *ucontext)
 {
-	//es posible que se puedan juntar las dos funciones en una sola
 	static int	i = 1;
 	static int	j;
 	static int	c;
@@ -58,15 +57,20 @@ static void	sig_handler_char(int sig, siginfo_t *info, void *ucontext)
 		c >>= 1;
 		c += 128;
 	}
+	else
+		c >>= 1;
+	if (i % 8 == 0)
+		g_str[j++] = c;
+	kill(info->si_pid, SIGUSR1);
 	return ;
 }
-*/
+
 int	main(void)
 {
 	int					i;
 	int					len_str;
 	struct sigaction	sa_len;
-//	struct sigaction	sa_char;
+	struct sigaction	sa_char;
 
 	ft_print_pid();
 	while (1)
@@ -78,22 +82,29 @@ int	main(void)
 		sigaction(SIGUSR1, &sa_len, NULL);
 		sigaction(SIGUSR2, &sa_len, NULL);
 		while (i++ < 32)
+		{	//write(1, "x\n", 2);
 			pause();
+		}
 		len_str = (int)g_str[3] * 16777216 + (int)g_str[2] * 65536
 			+ (int)g_str[1] * 256 + (int)g_str[0];
 		free(g_str);
 		ft_putnbr_fd(len_str, 1);
-
-		g_str = calloc(sizeof(char) * (len_str + 1));
-		sa_char.flags = SA_SIGINFO;
+write(1, "\n", 1);
+		g_str = malloc(sizeof(char) * (len_str + 1));
+		g_str[len_str] = 0;
+		sa_char.sa_flags = SA_SIGINFO;
 		sa_char.sa_sigaction = &sig_handler_char;
 		sigaction(SIGUSR1, &sa_char, NULL);
 		sigaction(SIGUSR2, &sa_char, NULL);
 		i = 0;
-		while (i++ < len)
+		//write (1, "XXXX\n", 5);
+		while (i++ <= len_str * 8)
+		{
 			pause();
-		free (g_str);
+write (1, "XXXX\n", 5);
+		}
 		ft_putstr_fd(g_str, 1);
+		free (g_str);
 	}
 	return (0);
 }

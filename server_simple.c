@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server_simple.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/08 12:59:53 by josgarci          #+#    #+#             */
+/*   Updated: 2021/12/08 13:36:45 by josgarci         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
 
 char	*g_str;
@@ -24,16 +36,15 @@ static void	sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 	}
 	else
 		c >>= 1;
-	//kill(info->si_pid, SIGUSR1);
-	(void)info;
 	if (i % 8 == 0)
 		g_str[j++] = c;
 	i++;
 	if (i == 33)
 		i = 1;
+	kill(info->si_pid, SIGUSR1);
 	return ;
 }
-
+/*
 static void	sig_handler_char(int sig, siginfo_t *info, void *ucontext)
 {
 	//es posible que se puedan juntar las dos funciones en una sola
@@ -49,13 +60,13 @@ static void	sig_handler_char(int sig, siginfo_t *info, void *ucontext)
 	}
 	return ;
 }
-
+*/
 int	main(void)
 {
 	int					i;
 	int					len_str;
 	struct sigaction	sa_len;
-	struct sigaction	sa_char;
+//	struct sigaction	sa_char;
 
 	ft_print_pid();
 	while (1)
@@ -71,6 +82,8 @@ int	main(void)
 		len_str = (int)g_str[3] * 16777216 + (int)g_str[2] * 65536
 			+ (int)g_str[1] * 256 + (int)g_str[0];
 		free(g_str);
+		ft_putnbr_fd(len_str, 1);
+
 		g_str = calloc(sizeof(char) * (len_str + 1));
 		sa_char.flags = SA_SIGINFO;
 		sa_char.sa_sigaction = &sig_handler_char;

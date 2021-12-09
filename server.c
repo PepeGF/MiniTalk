@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:53 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 19:11:08 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 11:54:00 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,13 @@ static void	sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 	else
 		c >>= 1;
 	if (i % 8 == 0)
+	{
 		g_str[j++] = c;
+		if ( c == 0)
+			ft_putchar_fd(48, 1);
+		else
+		ft_putchar_fd(c, 1);
+	}
 	i++;
 	if (i == 33)
 		i = 1;
@@ -51,6 +57,8 @@ static void	sig_handler_char(int sig, siginfo_t *info, void *ucontext)
 	static int	j;
 	static int	c;
 
+write (1, "\n", 1);
+ft_putnbr_fd(i, 1);
 	(void)ucontext;
 	if (sig == SIGUSR1)
 	{
@@ -60,7 +68,8 @@ static void	sig_handler_char(int sig, siginfo_t *info, void *ucontext)
 	else
 		c >>= 1;
 	if (i % 8 == 0)
-		g_str[j++] = c;
+		g_str[j++] = (char)c;
+	i++;
 	kill(info->si_pid, SIGUSR1);
 	return ;
 }
@@ -101,7 +110,6 @@ write(1, "\n", 1);
 		while (i++ <= len_str * 8)
 		{
 			pause();
-write (1, "XXXX\n", 5);
 		}
 		ft_putstr_fd(g_str, 1);
 		free (g_str);

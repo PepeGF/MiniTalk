@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:50 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 19:06:21 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 11:07:11 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,28 @@ static void	ft_send_len(int pid_server, int len)
 static void	ft_send_str(int pid_server, char *str)
 {
 	int					i;
+	int					j;
 	int					aux;
 	struct sigaction	sa_confirm;
-write (1, "XXXX\n", 5);
+write (1, "\n", 1);
 	i = 0;
 	sa_confirm.sa_sigaction = &ft_sig_confirm;
 	sigaction(SIGUSR1, &sa_confirm, NULL);
 	while (str[i])
 	{
 		aux = str[i];
+		j = 0;
+		while (j < 8)
+		{
 		if (aux % 2 == 0)
 			kill(pid_server, SIGUSR2);
 		else
 			kill(pid_server, SIGUSR1);
-		i++;
+		j++;
 		pause();
+		}
+		write (1, "\n", 1);
+		i++;
 	}
 }
 

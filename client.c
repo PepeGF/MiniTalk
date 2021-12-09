@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:50 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 11:07:11 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 13:55:13 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ int	main(int argc, char *argv[])
 	pid_server = ft_verify_input(argc, argv);
 	len = ft_strlen(argv[2]);
 //write (1, "XXXX\n", 5);
-//usleep(100);
 	ft_send_len(pid_server, len);
+usleep(100000);
 	ft_send_str(pid_server, argv[2]);
 	return (0);
 }
@@ -51,6 +51,7 @@ static void	ft_send_len(int pid_server, int len)
 	aux = len;
 	while (i <= 32)
 	{
+		//write(1, "/", 1);
 		if (aux % 2 == 0)
 			kill(pid_server, SIGUSR2);
 		else
@@ -67,24 +68,33 @@ static void	ft_send_str(int pid_server, char *str)
 	int					j;
 	int					aux;
 	struct sigaction	sa_confirm;
-write (1, "\n", 1);
+//write (1, "\n", 1);
 	i = 0;
 	sa_confirm.sa_sigaction = &ft_sig_confirm;
 	sigaction(SIGUSR1, &sa_confirm, NULL);
+	write(1, "\n", 1);
 	while (str[i])
 	{
 		aux = str[i];
 		j = 0;
 		while (j < 8)
 		{
+			ft_putnbr_fd(aux, 1);
 		if (aux % 2 == 0)
+		{
 			kill(pid_server, SIGUSR2);
+			write (1, " - Enviado un 0\n", 16);
+		}
 		else
+		{
 			kill(pid_server, SIGUSR1);
+			write (1, " - Enviado un 1\n", 16);
+		}
+		aux >>= 1;
 		j++;
 		pause();
 		}
-		write (1, "\n", 1);
+		//write (1, "\n", 1);
 		i++;
 	}
 }

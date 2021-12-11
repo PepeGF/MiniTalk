@@ -43,7 +43,7 @@ static int	ft_receive_len(void)
 	i = 0;
 	g_str = malloc(sizeof(int));
 	if (!g_str)
-		exit();
+		exit(EXIT_FAILURE);
 	sa_len.sa_flags = SA_SIGINFO;
 	sa_len.sa_sigaction = &ft_sig_handler_len;
 	sigaction(SIGUSR1, &sa_len, NULL);
@@ -51,7 +51,6 @@ static int	ft_receive_len(void)
 	while (++i <= 32)
 	{
 		pause();
-		i++;
 	}
 	len_str = (int)g_str[0];
 	free(g_str);
@@ -87,7 +86,7 @@ static void	ft_receive_str(int len_str)
 
 	g_str = malloc(sizeof(char) * (len_str + 1));
 	if (!g_str)
-		exit();
+		exit(EXIT_FAILURE);
 	g_str[len_str] = '\0';
 	sa_char.sa_flags = SA_SIGINFO;
 	sa_char.sa_sigaction = &ft_sig_handler_str;
@@ -97,7 +96,6 @@ static void	ft_receive_str(int len_str)
 	while (++i <= len_str * 8)
 	{
 		pause();
-		i++;
 	}
 	return ;
 }
@@ -109,10 +107,12 @@ int	main(void)
 	ft_print_pid();
 	while (1)
 	{
+		write (1, "Empiezo\n", 8);
 		len_str = ft_receive_len();
 		ft_receive_str(len_str);
 		ft_putstr_fd(g_str, 1);
 		free(g_str);
+		write (1, "Termino\n", 8);
 	}
 	return (0);
 }

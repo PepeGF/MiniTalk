@@ -1,4 +1,5 @@
-SRCS_CLIENT = client.c ft_atoi.c ft_putnbr_fd.c ft_putchar_fd.c ft_strlen.c 
+SRCS_CLIENT = client.c ft_atoi.c ft_putnbr_fd.c ft_putchar_fd.c ft_strlen.c \
+			  ft_verify_input.c 
 
 SRCS_SERVER = server.c ft_putnbr_fd.c ft_putchar_fd.c ft_putstr_fd.c
 

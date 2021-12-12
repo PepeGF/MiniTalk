@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_verify_input.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/23 13:08:57 by josgarci          #+#    #+#             */
-/*   Updated: 2021/09/24 23:16:07 by josgarci         ###   ########.fr       */
+/*   Created: 2021/12/12 22:08:17 by josgarci          #+#    #+#             */
+/*   Updated: 2021/12/12 22:10:15 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minitalk.h"
 
-void	*ft_calloc(size_t count, size_t size)
+int	ft_verify_input(int argc, char **argv)
 {
-	void	*ptr;
+	int	pid_server;
 
-	ptr = (void *)malloc(size * count);
-	if (ptr == NULL)
-		return (0);
-	ft_bzero(ptr, size * count);
-	return (ptr);
+	if (argc != 3)
+	{
+		write(1, "Entrada de datos incorrecta.\n", 29);
+		exit(1);
+	}
+	pid_server = ft_atoi(argv[1]);
+	if (pid_server < 0)
+	{
+		write(1, "PID del servidor incorrecto.\n", 29);
+		exit (1);
+	}
+	return (pid_server);
 }

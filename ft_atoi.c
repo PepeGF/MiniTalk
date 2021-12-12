@@ -6,10 +6,9 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 11:21:29 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/04 13:32:44 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/12 22:12:44 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 static int	check_overflows(unsigned long long n, int neg)
 {

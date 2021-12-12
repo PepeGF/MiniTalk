@@ -6,13 +6,12 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:50 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/12 21:47:02 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/12 22:10:51 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static int	ft_verify_input(int argc, char **argv);
 static void	ft_send_len(int pid_server, int len);
 static void	ft_send_str(int pid_server, char *str);
 
@@ -23,10 +22,6 @@ int	main(int argc, char *argv[])
 
 	pid_server = ft_verify_input(argc, argv);
 	len = ft_strlen(argv[2]);
-	write(1, "\n", 1);
-	write(1, "-----", 5);
-	ft_putnbr_fd(len, 1);
-	write(1, "-----", 5);
 	write(1, "\n", 1);
 	ft_send_len(pid_server, len);
 	write(1, "\n", 1);
@@ -111,31 +106,13 @@ static void	ft_send_str(int pid_server, char *str)
 	sa_confirm.sa_sigaction = &ft_sig_confirm;
 	sigaction(SIGUSR2, &sa_confirm, NULL);
 	while (str[++i])
-			ft_send_char(pid_server, str[i]);
+		ft_send_char(pid_server, str[i]);
 	i = -1;
 	while (++i < 8)
 	{
 		usleep(100);
 		if (kill(pid_server, SIGUSR2) == -1)
-				exit(EXIT_FAILURE);
+			exit(EXIT_FAILURE);
 		pause();
 	}
-}
-
-static int	ft_verify_input(int argc, char **argv)
-{
-	int	pid_server;
-
-	if (argc != 3)
-	{
-		write(1, "Entrada de datos incorrecta.\n", 29);
-		exit(1);
-	}
-	pid_server = ft_atoi(argv[1]);
-	if (pid_server < 0)
-	{
-		write(1, "PID del servidor incorrecto.\n", 29);
-		exit (1);
-	}
-	return (pid_server);
 }

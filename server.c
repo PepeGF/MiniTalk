@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 16:32:40 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/12 21:45:50 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/12 22:16:23 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,10 @@
 
 unsigned char	*g_str;
 
-/*static void	ft_print_pid(void)
-{
-	write (1, "PID: ", 5);
-	ft_putnbr_fd(getpid(), 1);
-	write (1, "\n", 1);
-	return ;
-}
-*/
 static void	ft_sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 {
-	static int	i = 1;
-	static int	j;
+	static int			i = 1;
+	static int			j;
 	static unsigned int	c;
 
 	(void)ucontext;
@@ -37,16 +29,12 @@ static void	ft_sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 	else
 		c >>= 1;
 	if (i % 8 == 0)
-	{
 		g_str[j++] = c;
-		write(1, &g_str[j], 1);
-	}
 	i++;
 	if (i % 33 == 0)
 	{
 		i = 1;
 		j = 0;
-		c = 0;
 	}
 	usleep(100);
 	if (kill(info->si_pid, SIGUSR1) == -1)
@@ -71,17 +59,9 @@ static int	ft_receive_len(void)
 	sigaction(SIGUSR2, &sa_len, NULL);
 	while (++i <= 32)
 		pause();
-	len_str = (unsigned int)g_str[0];
+	len_str = (int)g_str[3] * 16777216 + (int)g_str[2] * 65536
+		+ (int)g_str[1] * 256 + (int)g_str[0];
 	free(g_str);
-/*	write (1, "\n-----------\n", 13);
-	write(1, &g_str[0], 1);
-	write(1, &g_str[1], 1);
-	write(1, &g_str[2], 1);
-	write(1, &g_str[3], 1);
-	write (1, "\n-----------\n", 13);
-*/	write(1, "\n------\n| ", 10);
-	ft_putnbr_fd(len_str, 1);
-	write(1, " |\n------\n", 10);
 	return (len_str);
 }
 
@@ -120,11 +100,7 @@ static void	ft_receive_str(int len_str)
 
 	g_str = malloc(sizeof(char) * (len_str + 1));
 	if (!g_str)
-	{
-//		write (1, "Tu calloc apesta\n", 17);
 		exit(EXIT_FAILURE);
-	}
-	//g_str[len_str] = '\0';
 	sa_char.sa_flags = SA_SIGINFO;
 	sa_char.sa_sigaction = &ft_sig_handler_str;
 	sigaction(SIGUSR1, &sa_char, NULL);
@@ -144,8 +120,6 @@ int	main(void)
 	write (1, "PID: ", 5);
 	ft_putnbr_fd(getpid(), 1);
 	write (1, "\n", 1);
-
-//	ft_print_pid();
 	while (1)
 	{
 		len_str = ft_receive_len();

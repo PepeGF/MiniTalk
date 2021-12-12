@@ -18,8 +18,10 @@ RM = rm -f
 
 all: $(NAME_SERVER) $(NAME_CLIENT)
 
-%.o:%.c
-	@$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+$(NAME) : $(NAME_SERVER) $(NAME_CLIENT)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $? -o $(<:.c=.o)
 
 $(NAME_SERVER): $(OBJS_SERVER)
 	@$(CC) -o $(NAME_SERVER) $?

@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:50 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 22:07:21 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/12 12:39:38 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,31 @@ int	main(int argc, char *argv[])
 
 	pid_server = ft_verify_input(argc, argv);
 	len = ft_strlen(argv[2]);
-//write (1, "XXXX\n", 5);
-usleep(1);
+	usleep(225);
 	ft_send_len(pid_server, len);
-usleep(10);
+	usleep(225);
 	ft_send_str(pid_server, argv[2]);
 	return (0);
 }
 
 static void	ft_sig_confirm(int sig, siginfo_t *info, void *ucontext)
 {
+	static int	i;
+
 	(void)sig;
 	(void)info;
 	(void)ucontext;
-	write(1, "*", 1);
+	if (sig == SIGUSR1)
+	{
+		write(1, "*", 1);
+		if (i == 33)
+			i = 1;
+	}
+	else
+	{
+		write(1, "|", 1);
+	}
+	i++;
 	return ;
 }
 
@@ -52,16 +63,21 @@ static void	ft_send_len(int pid_server, int len)
 	aux = len;
 	while (i <= 32)
 	{
-	//	write(1, "/", 1);
 		if (aux % 2 == 0)
 		{
-			usleep(1);
-			kill(pid_server, SIGUSR2);
+			usleep(225);
+			if (kill(pid_server, SIGUSR2) == -1)
+			{
+				exit(EXIT_FAILURE);
+			}
 		}
 		else
 		{
-			usleep(1);
-			kill(pid_server, SIGUSR1);
+			usleep(225);
+			if (kill(pid_server, SIGUSR1) == -1)
+			{
+				exit(EXIT_FAILURE);
+			}
 		}
 		aux >>= 1;
 		i++;
@@ -75,35 +91,36 @@ static void	ft_send_str(int pid_server, char *str)
 	int					j;
 	int					aux;
 	struct sigaction	sa_confirm;
-//write (1, "\n", 1);
+
 	i = 0;
 	sa_confirm.sa_sigaction = &ft_sig_confirm;
-	sigaction(SIGUSR1, &sa_confirm, NULL);
-//	write(1, "\n", 1);
+	sigaction(SIGUSR2, &sa_confirm, NULL);
 	while (str[i])
 	{
 		aux = str[i];
 		j = 0;
 		while (j < 8)
 		{
-			//ft_putnbr_fd(aux, 1);
-		if (aux % 2 == 0)
-		{
-	usleep(1);
-			kill(pid_server, SIGUSR2);
-			//write (1, " - Enviado un 0\n", 16);
+			if (aux % 2 == 0)
+			{
+				usleep(225);
+				if (kill(pid_server, SIGUSR2) == -1)
+				{
+					exit(EXIT_FAILURE);
+				}
+			}
+			else
+			{
+				usleep(225);
+				if (kill(pid_server, SIGUSR1) == -1)
+				{
+					exit(EXIT_FAILURE);
+				}
+			}
+			aux >>= 1;
+			j++;
+			pause();
 		}
-		else
-		{
-	usleep(1);
-			kill(pid_server, SIGUSR1);
-			//write (1, " - Enviado un 1\n", 16);
-		}
-		aux >>= 1;
-		j++;
-		pause();
-		}
-		//write (1, "\n", 1);
 		i++;
 	}
 }

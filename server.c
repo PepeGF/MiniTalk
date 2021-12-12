@@ -29,8 +29,11 @@ static void	ft_sig_handler_len(int sig, siginfo_t *info, void *ucontext)
 	i++;
 	if (i == 33)
 		i = 1;
-	usleep(1);
-	kill(info->si_pid, SIGUSR1);
+	usleep(225);
+	if (kill(info->si_pid, SIGUSR1) == -1)
+	{
+		exit(EXIT_FAILURE);
+	}
 	return ;
 }
 
@@ -43,7 +46,9 @@ static int	ft_receive_len(void)
 	i = 0;
 	g_str = malloc(sizeof(int));
 	if (!g_str)
+	{
 		exit(EXIT_FAILURE);
+	}
 	sa_len.sa_flags = SA_SIGINFO;
 	sa_len.sa_sigaction = &ft_sig_handler_len;
 	sigaction(SIGUSR1, &sa_len, NULL);
@@ -74,8 +79,11 @@ static void	ft_sig_handler_str(int sig, siginfo_t *info, void *ucontext)
 	if (i % 8 == 0)
 		g_str[++j] = (char)c;
 	i++;
-	usleep(1);
-	kill(info->si_pid, SIGUSR1);
+	usleep(225);
+	if (kill(info->si_pid, SIGUSR2) == -1)
+	{
+		exit(EXIT_FAILURE);
+	}
 	return ;
 }
 
@@ -86,7 +94,9 @@ static void	ft_receive_str(int len_str)
 
 	g_str = malloc(sizeof(char) * (len_str + 1));
 	if (!g_str)
+	{
 		exit(EXIT_FAILURE);
+	}
 	g_str[len_str] = '\0';
 	sa_char.sa_flags = SA_SIGINFO;
 	sa_char.sa_sigaction = &ft_sig_handler_str;
@@ -107,12 +117,10 @@ int	main(void)
 	ft_print_pid();
 	while (1)
 	{
-		write (1, "Empiezo\n", 8);
 		len_str = ft_receive_len();
 		ft_receive_str(len_str);
 		ft_putstr_fd(g_str, 1);
 		free(g_str);
-		write (1, "Termino\n", 8);
 	}
 	return (0);
 }

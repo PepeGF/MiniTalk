@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 16:32:40 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/12 20:47:51 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/12 21:13:20 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ static void	ft_receive_str(int len_str)
 	int					i;
 	struct sigaction	sa_char;
 
-	g_str = calloc(sizeof(char), (len_str + 1));
+	g_str = malloc(sizeof(char) * (len_str + 1));
 	if (!g_str)
 	{
 //		write (1, "Tu calloc apesta\n", 17);

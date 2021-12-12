@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:50 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/12 19:45:56 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/12 19:58:24 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char *argv[])
 	ft_send_len(pid_server, len);
 	write(1, "\n", 1);
 	ft_send_str(pid_server, argv[2]);
-	write(1, "\n", 1);
+	write(1, "\n\n", 2);
 	return (0);
 }
 

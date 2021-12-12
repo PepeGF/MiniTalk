@@ -6,7 +6,7 @@
 /*   By: josgarci <josgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 12:59:50 by josgarci          #+#    #+#             */
-/*   Updated: 2021/12/12 19:58:24 by josgarci         ###   ########.fr       */
+/*   Updated: 2021/12/12 21:47:02 by josgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ int	main(int argc, char *argv[])
 
 	pid_server = ft_verify_input(argc, argv);
 	len = ft_strlen(argv[2]);
+	write(1, "\n", 1);
+	write(1, "-----", 5);
+	ft_putnbr_fd(len, 1);
+	write(1, "-----", 5);
 	write(1, "\n", 1);
 	ft_send_len(pid_server, len);
 	write(1, "\n", 1);
